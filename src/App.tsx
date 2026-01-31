@@ -8,6 +8,7 @@ import useAuthEffect from "./components/useAuthEffect"
 import PrivateRoute from "./components/PrivateRoute"
 import GetAllCompany from "./Page/Company/GetAllCompany"
 import GetCompanyidDetails from "./Page/Company/GetCompanyidDetails"
+import ViewById from "./Page/Amount/ViewById"
 
 const App = () => {
   useAuthEffect();
@@ -22,6 +23,7 @@ const App = () => {
           <Route path="/company-register" element={<RegisterCompany />} />
           <Route path="/get-company" element={<GetAllCompany />} />
           <Route path="/get-company/:id" element={<GetCompanyidDetails />} />
+          <Route path="/get-payment/:id" element={<ViewById />} />
         </Route>
         <Route path="*" element={<div>Page Not Found</div>} />
       </Routes>

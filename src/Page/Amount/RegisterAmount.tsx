@@ -13,30 +13,47 @@ import {
 
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-
 import { Button } from "@/components/ui/button"
+import { useSelector } from "react-redux"
+import CheckEnvironment from "@/CheckEnvironment/CheckEnvironment"
 
 
-/* ---------- helpers ---------- */
 const formatIndianCurrency = (value: string) => {
   if (!value) return ""
-  const numbers = value.replace(/,/g, "")
-  return "₹ " + Number(numbers).toLocaleString("en-IN")
+  return "₹ " + Number(value).toLocaleString("en-IN")
 }
 
 const extractNumber = (value: string) =>
   Number(value.replace(/[^0-9]/g, ""))
 
-/* ---------- component ---------- */
-const RegisterAmount = () => {
+
+const RegisterAmount = ({ id }: { id: string | undefined }) => {
   const [amount, setAmount] = useState("")
   const [date, setDate] = useState("")
 
+  const { user } = useSelector(
+    (state: {
+      auth: { user: { token: string } }
+    }) => state.auth
+  )
+
+  const { base_url } = CheckEnvironment()
+
+  /* ---------- mutation ---------- */
   const { mutate, isPending } = useMutation({
-    mutationFn: async (payload: { amount: number; date: string }) => {
+    mutationFn: async (data: { payamount: number; takedate: string }) => {
       const res = await axios.post(
-        "http://localhost:5000/api/payment/create",
-        payload
+        `${base_url}/api/payments/create`,
+        {
+          ...data,
+          companyBy: id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+            "Content-Type": "application/json",
+          },
+        }
       )
       return res.data
     },
@@ -50,12 +67,20 @@ const RegisterAmount = () => {
     },
   })
 
+  /* ---------- submit ---------- */
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
+    const numericAmount = extractNumber(amount)
+
+    if (!numericAmount || !date) {
+      alert("Please enter amount and date")
+      return
+    }
+
     mutate({
-      amount: extractNumber(amount),
-      date,
+      payamount: numericAmount,
+      takedate: date,
     })
   }
 
@@ -63,7 +88,7 @@ const RegisterAmount = () => {
     <Card className="w-full mt-4">
       <CardHeader>
         <CardTitle>Payment</CardTitle>
-        <CardDescription>Enter payment details</CardDescription>
+        <CardDescription>Enter payment details below</CardDescription>
       </CardHeader>
 
       <form onSubmit={handleSubmit}>
@@ -75,12 +100,14 @@ const RegisterAmount = () => {
               <Input
                 className="font-semibold"
                 placeholder="Enter amount"
+                required
                 value={amount}
                 onChange={(e) => {
                   const raw = e.target.value.replace(/[^0-9]/g, "")
                   setAmount(formatIndianCurrency(raw))
                 }}
               />
+               <p className="text-xs capitalize text-red-500">end to end encrypted</p>
             </div>
 
             {/* Date */}
@@ -89,6 +116,7 @@ const RegisterAmount = () => {
               <Input
                 type="date"
                 className="font-semibold"
+                required
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
               />
