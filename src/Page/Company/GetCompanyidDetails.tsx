@@ -1,8 +1,8 @@
-import CompanyByid from "@/components/Hook/Compnay/CompanyByid"
-import { Button } from "@/components/ui/button";
-import { useParams } from "react-router"
+import CompanyByid from "@/components/Hook/Compnay/CompanyByid";
+import { useParams } from "react-router";
 import RegisterAmount from "../Amount/RegisterAmount";
 import ViewAmount from "../Amount/ViewAmount";
+import UpdateCompany from "../UpdateCompany/UpdateCompany";
 
 const GetCompanyidDetails = () => {
     const { id } = useParams();
@@ -21,12 +21,10 @@ const GetCompanyidDetails = () => {
 
     const formatDate = (dateString: string) => {
         if (!dateString) return 'N/A';
-        return new Date(dateString).toLocaleDateString('en-US', {
+        return new Date(dateString).toLocaleDateString('en-IN', {
             year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
+            month: 'short',
+            day: '2-digit',
         });
     };
 
@@ -47,14 +45,14 @@ const GetCompanyidDetails = () => {
                 <div className="px-6 py-4 space-y-4">
                     <div className="flex justify-between items-center">
                         <span className="text-sm font-medium ">Payment Plan</span>
-                        <span className={`px-2 py-1 text-xs font-semibold rounded-full `}>
-                            {getCompanyid?.payplan || "₹ 0"}
+                        <span className={`px-2 py-1 text-xs capitalize font-semibold rounded-full `}>
+                            {getCompanyid?.payplan || "N/A"}
                         </span>
                     </div>
                     <div className="flex justify-between items-center">
                         <span className="text-sm font-medium ">Payment Date</span>
                         <span className="text-sm ">
-                            {getCompanyid?.paydate ? formatDate(getCompanyid?.paydate) : <Button>Update</Button>}
+                            {getCompanyid?.paydate ? formatDate(getCompanyid?.paydate) : <UpdateCompany companyId={id}/>}
                         </span>
                     </div>
                 </div>

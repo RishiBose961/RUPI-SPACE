@@ -120,8 +120,8 @@ export default function GetAllCompany() {
                                             ? company.paydate
                                             : "-"}
                                     </td>
-                                    <td className="p-3">
-                                        {company.payplan ? company.payplan : "₹ 0"}
+                                    <td className="p-3 capitalize">
+                                        {company.payplan ? company.payplan : "-" }
                                     </td>
                                     <td className="p-3">
                                         <Link to={`/get-company/${company._id}`}>

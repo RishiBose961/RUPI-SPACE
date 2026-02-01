@@ -60,14 +60,13 @@ const RegisterAmount = ({ id }: { id: string | undefined }) => {
     onSuccess: () => {
       setAmount("")
       setDate("")
-      alert("Payment created successfully ✅")
+      alert(`Payment of ${amount} is created successfully`)
     },
     onError: (error: { response: { data: { message: string } } }) => {
       alert(error?.response?.data?.message || "Something went wrong ❌")
     },
   })
 
-  /* ---------- submit ---------- */
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -107,7 +106,6 @@ const RegisterAmount = ({ id }: { id: string | undefined }) => {
                   setAmount(formatIndianCurrency(raw))
                 }}
               />
-               <p className="text-xs capitalize text-red-500">end to end encrypted</p>
             </div>
 
             {/* Date */}

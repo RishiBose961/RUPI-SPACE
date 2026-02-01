@@ -29,6 +29,22 @@ const cardData: CardItem[] = [
         name: "Company View & Manage",
         link: "/get-company",
         madeNot: true,
+    }, {
+        id: 3,
+        name: "Payment Monthly",
+        link: "/get-payment",
+        madeNot: true,
+    },
+    {
+        id: 4,
+        name: "Payment Half Yearly",
+        link: "/get-payment",
+        madeNot: true,
+    }, {
+        id: 5,
+        name: "Payment Yearly",
+        link: "/get-payment",
+        madeNot: true,
     }
 ];
 
