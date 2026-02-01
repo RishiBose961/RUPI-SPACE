@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import CheckEnvironment from "@/CheckEnvironment/CheckEnvironment";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router";
+import { Loader2 } from "lucide-react";
 
 type Company = {
     _id: string;
@@ -58,7 +59,7 @@ export default function GetAllCompany() {
     const [searchInput, setSearchInput] = useState("");
     const [search, setSearch] = useState("");
 
-    const { data, isLoading, isError } = useQuery({
+    const { data, isLoading, isError, isFetching } = useQuery({
         queryKey: ["companies", page, search],
         queryFn: () => fetchCompanies(page, search, user?.token || "", base_url),
         placeholderData: keepPreviousData
@@ -92,6 +93,15 @@ export default function GetAllCompany() {
             </form>
 
             {isLoading && <p>Loading companies...</p>}
+
+            {isFetching && !isLoading && (
+  <div className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
+    <Loader2 className="h-4 w-4 animate-spin" />
+    Updating...
+  </div>
+)}
+
+
             {isError && <p className="text-red-500">Failed to load data</p>}
 
             {data && data.data.length === 0 && (
@@ -121,7 +131,7 @@ export default function GetAllCompany() {
                                             : "-"}
                                     </td>
                                     <td className="p-3 capitalize">
-                                        {company.payplan ? company.payplan : "-" }
+                                        {company.payplan ? company.payplan : "-"}
                                     </td>
                                     <td className="p-3">
                                         <Link to={`/get-company/${company._id}`}>
