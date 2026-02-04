@@ -15,6 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { HandCoinsIcon, List, Search } from "lucide-react";
 import { Link } from "react-router";
+import MotivationalLoader from "@/components/Loading/MotivationalLoader";
 
 
 type Company = {
@@ -85,7 +86,10 @@ export default function MonthlyCom() {
         setPage(1);
         setSearch(input);
     };
-
+    
+    if (isLoading) {
+        return <MotivationalLoader/>
+    }
     return (
         <div className="p-6 max-w-5xl mx-auto bg-card rounded-xl">
             <h1 className="text-2xl font-bold mb-4">Monthly Plan Companies</h1>
@@ -104,7 +108,7 @@ export default function MonthlyCom() {
                 </Button>
             </form>
 
-            {isLoading && <p>Loading companies...</p>}
+         
             {isError && <p className="text-red-500">Failed to load data</p>}
 
             {data && (

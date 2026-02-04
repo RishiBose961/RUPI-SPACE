@@ -15,6 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { HandCoinsIcon, List, Search } from "lucide-react";
 import { Link } from "react-router";
+import MotivationalLoader from "@/components/Loading/MotivationalLoader";
 
 
 type Company = {
@@ -85,7 +86,9 @@ export default function HalfYear() {
         setPage(1);
         setSearch(input);
     };
-
+    if (isLoading) {
+        return <MotivationalLoader />
+    }
     return (
         <div className="p-6 max-w-5xl mx-auto bg-card rounded-xl">
             <h1 className="text-2xl font-bold mb-4">Half Year Plan Companies</h1>
@@ -100,11 +103,11 @@ export default function HalfYear() {
                     className="border px-3 py-2 rounded w-full"
                 />
                 <Button className=" cursor-pointer rounded-full">
-                    <Search/>
+                    <Search />
                 </Button>
             </form>
 
-            {isLoading && <p>Loading companies...</p>}
+
             {isError && <p className="text-red-500">Failed to load data</p>}
 
             {data && (
@@ -125,18 +128,18 @@ export default function HalfYear() {
                                     <TableCell className="font-medium">{company.companyname}</TableCell>
                                     <TableCell className=" capitalize">{company.payplan}</TableCell>
                                     <TableCell>  {new Date(company.paydate).toLocaleDateString()}</TableCell>
-                                     <TableCell className="flex gap-2">
+                                    <TableCell className="flex gap-2">
                                         <Link to={`/get-company/${company._id}`}>
                                             <Button className=" cursor-pointer rounded-full">
-                                               <HandCoinsIcon/>
+                                                <HandCoinsIcon />
                                             </Button>
                                         </Link>
                                         <Link to={`/get-payment/${company._id}`}>
                                             <Button className=" cursor-pointer rounded-full">
-                                                <List/>
+                                                <List />
                                             </Button>
                                         </Link>
-                                     </TableCell>
+                                    </TableCell>
                                 </TableRow>
 
                             ))}
@@ -146,10 +149,10 @@ export default function HalfYear() {
                                 </TableRow>
 
                             )}
-                         
+
                         </TableBody>
                     </Table>
-                  
+
 
                     {/* Pagination */}
                     <div className="flex justify-between items-center mt-4">

@@ -5,7 +5,9 @@ import { useSelector } from "react-redux";
 import CheckEnvironment from "@/CheckEnvironment/CheckEnvironment";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router";
-import { Loader2 } from "lucide-react";
+import { Loader2, Search } from "lucide-react";
+import MotivationalLoader from "@/components/Loading/MotivationalLoader";
+import UpdateCompany from "../UpdateCompany/UpdateCompany";
 
 type Company = {
     _id: string;
@@ -71,6 +73,9 @@ export default function GetAllCompany() {
         setSearch(searchInput);
     };
 
+    if (isLoading) {
+        return <MotivationalLoader />
+    }
     return (
         <div className="p-6 max-w-6xl mx-auto">
             <h1 className="text-2xl font-bold mb-4">Companies</h1>
@@ -88,18 +93,17 @@ export default function GetAllCompany() {
                     type="submit"
                     className=" cursor-pointer px-3 py-2 rounded"
                 >
-                    Search
+                    <Search/>
                 </Button>
             </form>
 
-            {isLoading && <p>Loading companies...</p>}
 
             {isFetching && !isLoading && (
-  <div className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
-    <Loader2 className="h-4 w-4 animate-spin" />
-    Updating...
-  </div>
-)}
+                <div className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Updating...
+                </div>
+            )}
 
 
             {isError && <p className="text-red-500">Failed to load data</p>}
@@ -117,7 +121,7 @@ export default function GetAllCompany() {
                                 <th className="p-3">Person</th>
                                 <th className="p-3">Pay Date</th>
                                 <th className="p-3">Pay Plan</th>
-                                <th className="p-3">Action</th>
+                                <th className="p-3 text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -133,12 +137,14 @@ export default function GetAllCompany() {
                                     <td className="p-3 capitalize">
                                         {company.payplan ? company.payplan : "-"}
                                     </td>
-                                    <td className="p-3">
+                                    <td className="p-3 text-center">
                                         <Link to={`/get-company/${company._id}`}>
                                             <Button variant="link" className="px-3 py-1 cursor-pointer rounded mr-2">
                                                 View details
                                             </Button>
                                         </Link>
+                                          <UpdateCompany companyId={company._id}/>
+
 
                                     </td>
                                 </tr>

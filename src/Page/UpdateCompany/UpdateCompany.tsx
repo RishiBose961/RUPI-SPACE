@@ -73,7 +73,7 @@ const UpdateCompany = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Update</Button>
+        <Button className=" cursor-pointer"  variant="link">Update</Button>
       </DialogTrigger>
 
       <DialogContent>
