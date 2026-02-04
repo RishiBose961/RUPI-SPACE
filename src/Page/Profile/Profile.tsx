@@ -1,46 +1,43 @@
-import { Badge } from "@/components/ui/badge"
-import {
-  Card,
-  CardAction,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from "@/components/ui/card"
-import { useSelector } from "react-redux";
+import { logoutUserAction } from "@/slice/authSlice";
+import { LogOut } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Profile() {
-  const { user, isAuthenticated } = useSelector(
+  const { user } = useSelector(
     (state: {
       auth: {
         isAuthenticated: boolean;
-        user: { token: string; _id: string; name: string; avatar: string };
+        user: { token: string; _id: string; name: string; avatar: string; email: string };
       };
     }) => state.auth
   );
 
+    const dispatch = useDispatch();
+
+
+  const handleLogout = () => {
+
+    dispatch(logoutUserAction());
+    window.location.replace("/login");
+  };
+
+
 
 
   return (
-    <Card>
-      <div className="flex items-center justify-center">
-        <img
-          src={user?.avatar}
-          alt="Event cover"
-          className=" rounded-full size-48 object-cover"
-        />
+    <div className="flex justify-between items-center bg-card p-3 rounded-xl">
+      <div className="flex items-center  gap-3">
+        <div>
+          <img src={user.avatar} alt={user.name} className="size-14 rounded-full" />
+        </div>
+        <div>
+          <h1>{user.name}</h1>
+          <p>{user.email}</p>
+        </div>
+
       </div>
+        <LogOut onClick={handleLogout}/>
+    </div>
 
-      <CardHeader>
-        <CardAction>
-          {isAuthenticated && <Badge variant="secondary">Logout</Badge>}
-        </CardAction>
-        <CardTitle>Welcome</CardTitle>
-        <CardDescription>
-          {user?.name}
-        </CardDescription>
-      </CardHeader>
-
-
-    </Card>
   )
 }

@@ -9,6 +9,9 @@ import PrivateRoute from "./components/PrivateRoute"
 import GetAllCompany from "./Page/Company/GetAllCompany"
 import GetCompanyidDetails from "./Page/Company/GetCompanyidDetails"
 import ViewById from "./Page/Amount/ViewById"
+import HalfYear from "./Page/DayMonthYear/HalfYear"
+import MonthlyCom from "./Page/DayMonthYear/MonthlyCom"
+import YearlyComp from "./Page/DayMonthYear/YearlyComp"
 
 const App = () => {
   useAuthEffect();
@@ -24,6 +27,9 @@ const App = () => {
           <Route path="/get-company" element={<GetAllCompany />} />
           <Route path="/get-company/:id" element={<GetCompanyidDetails />} />
           <Route path="/get-payment/:id" element={<ViewById />} />
+          <Route path="/get-half-year" element={<HalfYear />} />
+          <Route path="/get-monthly" element={<MonthlyCom />} />
+          <Route path="/get-yearly" element={<YearlyComp />} />
         </Route>
         <Route path="*" element={<div>Page Not Found</div>} />
       </Routes>

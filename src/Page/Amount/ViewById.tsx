@@ -23,6 +23,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import UpdatePayment from "@/components/PaymentComp/UpdatePayment"
+import { Badge } from "@/components/ui/badge"
+import { PaymentChart } from "@/components/Chart/PaymentChart"
 
 /* ---------- API ---------- */
 const fetchPayments = async (
@@ -30,7 +33,7 @@ const fetchPayments = async (
   takedate: string,
   base_url: string,
   token: string,
-  id: string
+  id: string,
 ) => {
   const res = await axios.get(
     `${base_url}/api/payments/${id}`,
@@ -76,8 +79,9 @@ const ViewById = () => {
   const payments = data?.data || []
 
   return (
-    <div className="p-6 space-y-6">
-      <Card>
+    <div className="grid lg:grid-cols-3 gap-4">
+    
+      <Card className="col-span-2">
         <CardHeader>
           <CardTitle>Company Payments</CardTitle>
         </CardHeader>
@@ -122,6 +126,9 @@ const ViewById = () => {
             <p>No payments found</p>
           )}
 
+
+
+
           <div className="space-y-3">
             <Table>
               <TableCaption>A list of your recent payments.</TableCaption>
@@ -135,15 +142,13 @@ const ViewById = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {payments.map((p: { _id: string; payamount: number; takedate: string; createdAt: string }) => (
+                {payments.map((p: { _id: string; payamount: number; takedate: string; createdAt: string, paid: boolean }) => (
                   <TableRow key={p._id}>
                     <TableCell className="font-medium">₹ {p.payamount.toLocaleString("en-IN")}</TableCell>
                     <TableCell> {new Date(p.takedate).toLocaleDateString()}</TableCell>
                     <TableCell> {new Date(p.createdAt).toLocaleDateString()}</TableCell>
-                    <TableCell>Success</TableCell>
-                    <TableCell>
-                      <Button>Paid</Button>
-                    </TableCell>
+                    <TableCell> {p.paid ? <Badge variant="destructive">Paid</Badge> : <Badge variant="default">Pending</Badge>}</TableCell>
+                      <TableCell> {p.paid ? "": <UpdatePayment id={p._id} />}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -176,6 +181,10 @@ const ViewById = () => {
           )}
         </CardContent>
       </Card>
+        <div>
+           <PaymentChart/>
+      </div>
+   
     </div>
   )
 }

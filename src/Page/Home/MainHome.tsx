@@ -32,18 +32,18 @@ const cardData: CardItem[] = [
     }, {
         id: 3,
         name: "Payment Monthly",
-        link: "/get-payment",
+        link: "/get-monthly",
         madeNot: true,
     },
     {
         id: 4,
         name: "Payment Half Yearly",
-        link: "/get-payment",
+        link: "/get-half-year",
         madeNot: true,
     }, {
         id: 5,
         name: "Payment Yearly",
-        link: "/get-payment",
+        link: "/get-yearly",
         madeNot: true,
     }
 ];

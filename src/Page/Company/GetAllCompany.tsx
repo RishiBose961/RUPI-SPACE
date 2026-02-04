@@ -148,7 +148,6 @@ export default function GetAllCompany() {
                 </div>
             )}
 
-            {/* 📄 Pagination */}
             {data && data.totalPages > 1 && (
                 <div className="flex justify-center items-center gap-3 mt-6">
                     <button

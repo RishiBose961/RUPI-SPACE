@@ -1,0 +1,66 @@
+import axios from "axios"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { Button } from "../ui/button"
+import { useSelector } from "react-redux"
+import CheckEnvironment from "@/CheckEnvironment/CheckEnvironment"
+
+type Props = {
+  id: string | undefined
+}
+
+const updatePayment = async (
+  id: string,
+  base_url: string,
+  token: string
+) => {
+  const res = await axios.put(
+    `${base_url}/api/payments/update/${id}`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  )
+  return res.data
+}
+
+const UpdatePayment = ({ id }: Props) => {
+  const { user } = useSelector(
+    (state: {
+      auth: {
+        isAuthenticated: boolean
+        user: { token: string; _id: string }
+      }
+    }) => state.auth
+  )
+
+  const { base_url } = CheckEnvironment()
+  const queryClient = useQueryClient()
+
+  const { mutate, isPending, isSuccess } = useMutation({
+    mutationFn: () => updatePayment(id as string, base_url, user?.token || ""),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["payments"] })
+    },
+  })
+
+  const handleClick = () => {
+    if (!id) return
+    mutate()
+  }
+
+  return (
+    <div>
+      <Button
+        onClick={handleClick}
+        className=" cursor-pointer"
+        disabled={isPending || isSuccess || !id}
+      >
+        {isPending ? "Updating..." : isSuccess ? "Paid" : "Pay Now"}
+      </Button>
+    </div>
+  )
+}
+
+export default UpdatePayment
