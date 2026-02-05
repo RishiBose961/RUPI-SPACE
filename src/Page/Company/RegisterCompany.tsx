@@ -132,7 +132,6 @@ const RegisterCompany = () => {
     mutation.mutate(payload);
   };
 
-  // ---------------- UI ----------------
   return (
     <Card className="w-full">
       <CardHeader>

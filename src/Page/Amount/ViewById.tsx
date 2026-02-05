@@ -1,7 +1,12 @@
-import { useState } from "react"
-import axios from "axios"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
+import axios from "axios"
+import { useState } from "react"
 
+import CheckEnvironment from "@/CheckEnvironment/CheckEnvironment"
+import { PaymentChart } from "@/components/Chart/PaymentChart"
+import UpdatePayment from "@/components/PaymentComp/UpdatePayment"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -9,11 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
-import { useSelector } from "react-redux"
-import CheckEnvironment from "@/CheckEnvironment/CheckEnvironment"
-import { useParams } from "react-router"
 import {
   Table,
   TableBody,
@@ -23,11 +24,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import UpdatePayment from "@/components/PaymentComp/UpdatePayment"
-import { Badge } from "@/components/ui/badge"
-import { PaymentChart } from "@/components/Chart/PaymentChart"
+import { EditIcon } from "lucide-react"
+import { useSelector } from "react-redux"
+import { useParams } from "react-router"
 
-/* ---------- API ---------- */
+
+
 const fetchPayments = async (
   page: number,
   takedate: string,
@@ -36,7 +38,7 @@ const fetchPayments = async (
   id: string,
 ) => {
   const res = await axios.get(
-    `${base_url}/api/payments/${id}`,
+    `${base_url}/api/payments/due/${id}`,
     {
       params: {
         page,
@@ -73,14 +75,17 @@ const ViewById = () => {
     queryKey: ["payments", page, appliedDate, id],
     queryFn: () => fetchPayments(page, appliedDate, base_url, user?.token || "", id || ""),
     placeholderData: keepPreviousData,
-    enabled: isAuthenticated && !!id
+    enabled: isAuthenticated && !!id,
+    staleTime: 60 * 1000,
   })
 
   const payments = data?.data || []
 
+  
+
   return (
     <div className="grid lg:grid-cols-3 gap-4">
-    
+
       <Card className="col-span-2">
         <CardHeader>
           <CardTitle>Company Payments</CardTitle>
@@ -136,19 +141,63 @@ const ViewById = () => {
                 <TableRow>
                   <TableHead>Amount</TableHead>
                   <TableHead>Payment Date</TableHead>
-                  <TableHead>Created At</TableHead>
+                   <TableHead>Late Days</TableHead>
+                  <TableHead>Fine Amount</TableHead>
+                  <TableHead>Cal. Fine</TableHead>
+                  <TableHead>T Amount</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Action</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {payments.map((p: { _id: string; payamount: number; takedate: string; createdAt: string, paid: boolean }) => (
-                  <TableRow key={p._id}>
-                    <TableCell className="font-medium">₹ {p.payamount.toLocaleString("en-IN")}</TableCell>
-                    <TableCell> {new Date(p.takedate).toLocaleDateString()}</TableCell>
-                    <TableCell> {new Date(p.createdAt).toLocaleDateString()}</TableCell>
-                    <TableCell> {p.paid ? <Badge variant="destructive">Paid</Badge> : <Badge variant="default">Pending</Badge>}</TableCell>
-                      <TableCell> {p.paid ? "": <UpdatePayment id={p._id} />}</TableCell>
+                {payments.map((p: {
+                  _id: string
+                  payamount: number
+                  takedate: string
+                  createdAt: string
+                  fine?: number
+                  calculatedFine: number
+                  totalAmount: number
+                  paid: boolean
+                  lateDays: number
+                }) => (
+                  <TableRow key={p._id} className="hover:bg-muted/40 transition-colors">
+                    <TableCell className="font-medium text-center">
+                      ₹ {p.payamount.toLocaleString("en-IN")}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {new Date(p.takedate).toLocaleDateString("en-IN", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {p.lateDays}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      <div className="flex items-center justify-center gap-2">
+                        <span>₹ {(p.fine || 50).toLocaleString("en-IN")}</span>
+                        <EditIcon className="size-4 cursor-pointer text-muted-foreground hover:text-red-500 transition" />
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-center text-orange-600 font-medium">
+                      ₹ {p.calculatedFine.toLocaleString("en-IN")}
+                    </TableCell>
+                    <TableCell className="text-center font-semibold text-green-600">
+                      ₹ {p.totalAmount.toLocaleString("en-IN")}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {p.paid ? (
+                        <Badge className="bg-green-600 hover:bg-green-700">Paid</Badge>
+                      ) : (
+                        <Badge variant="secondary">Pending</Badge>
+                      )}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {!p.paid && <UpdatePayment id={p._id} totalAmount={p.totalAmount}/>}
+                    </TableCell>
+
                   </TableRow>
                 ))}
               </TableBody>
@@ -181,10 +230,10 @@ const ViewById = () => {
           )}
         </CardContent>
       </Card>
-        <div>
-           <PaymentChart/>
+      <div>
+        <PaymentChart />
       </div>
-   
+
     </div>
   )
 }

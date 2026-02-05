@@ -64,7 +64,8 @@ export default function GetAllCompany() {
     const { data, isLoading, isError, isFetching } = useQuery({
         queryKey: ["companies", page, search],
         queryFn: () => fetchCompanies(page, search, user?.token || "", base_url),
-        placeholderData: keepPreviousData
+        placeholderData: keepPreviousData,
+        staleTime: 60 * 1000,
     });
 
     const handleSearch = (e: React.FormEvent) => {
@@ -93,7 +94,7 @@ export default function GetAllCompany() {
                     type="submit"
                     className=" cursor-pointer px-3 py-2 rounded"
                 >
-                    <Search/>
+                    <Search />
                 </Button>
             </form>
 
@@ -143,7 +144,7 @@ export default function GetAllCompany() {
                                                 View details
                                             </Button>
                                         </Link>
-                                          <UpdateCompany companyId={company._id}/>
+                                        <UpdateCompany companyId={company._id} />
 
 
                                     </td>

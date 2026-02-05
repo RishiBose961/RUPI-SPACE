@@ -5,17 +5,21 @@ import { useSelector } from "react-redux"
 import CheckEnvironment from "@/CheckEnvironment/CheckEnvironment"
 
 type Props = {
-  id: string | undefined
+  id: string | undefined,
+  totalAmount: number
 }
 
 const updatePayment = async (
   id: string,
   base_url: string,
-  token: string
+  token: string,
+  totalAmount: number
 ) => {
   const res = await axios.put(
     `${base_url}/api/payments/update/${id}`,
-    {},
+    {
+      payamount:totalAmount
+    },
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -25,7 +29,7 @@ const updatePayment = async (
   return res.data
 }
 
-const UpdatePayment = ({ id }: Props) => {
+const UpdatePayment = ({ id,totalAmount }: Props) => {
   const { user } = useSelector(
     (state: {
       auth: {
@@ -39,7 +43,7 @@ const UpdatePayment = ({ id }: Props) => {
   const queryClient = useQueryClient()
 
   const { mutate, isPending, isSuccess } = useMutation({
-    mutationFn: () => updatePayment(id as string, base_url, user?.token || ""),
+    mutationFn: () => updatePayment(id as string, base_url, user?.token || "",totalAmount),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["payments"] })
     },

@@ -79,6 +79,7 @@ export default function YearlyComp() {
         queryFn: () => fetchCompanies(page, search, user, base_url),
         enabled: isAuthenticated && !!user?.token,
         placeholderData: keepPreviousData,
+        staleTime: 60 * 1000,
     });
 
     const handleSearch = (e: React.FormEvent) => {
@@ -86,9 +87,9 @@ export default function YearlyComp() {
         setPage(1);
         setSearch(input);
     };
-      if (isLoading) {
-            return <MotivationalLoader/>
-        }
+    if (isLoading) {
+        return <MotivationalLoader />
+    }
     return (
         <div className="p-6 max-w-5xl mx-auto bg-card rounded-xl">
             <h1 className="text-2xl font-bold mb-4">Yearly Plan Companies</h1>
@@ -103,7 +104,7 @@ export default function YearlyComp() {
                     className="border px-3 py-2 rounded w-full"
                 />
                 <Button className=" cursor-pointer rounded-full">
-                    <Search/>
+                    <Search />
                 </Button>
             </form>
 
@@ -127,18 +128,18 @@ export default function YearlyComp() {
                                     <TableCell className="font-medium">{company.companyname}</TableCell>
                                     <TableCell className=" capitalize">{company.payplan}</TableCell>
                                     <TableCell>  {new Date(company.paydate).toLocaleDateString()}</TableCell>
-                                     <TableCell className="flex gap-2">
+                                    <TableCell className="flex gap-2">
                                         <Link to={`/get-company/${company._id}`}>
                                             <Button className=" cursor-pointer rounded-full">
-                                               <HandCoinsIcon/>
+                                                <HandCoinsIcon />
                                             </Button>
                                         </Link>
                                         <Link to={`/get-payment/${company._id}`}>
                                             <Button className=" cursor-pointer rounded-full">
-                                                <List/>
+                                                <List />
                                             </Button>
                                         </Link>
-                                     </TableCell>
+                                    </TableCell>
                                 </TableRow>
 
                             ))}
@@ -148,10 +149,10 @@ export default function YearlyComp() {
                                 </TableRow>
 
                             )}
-                         
+
                         </TableBody>
                     </Table>
-                  
+
 
                     {/* Pagination */}
                     <div className="flex justify-between items-center mt-4">

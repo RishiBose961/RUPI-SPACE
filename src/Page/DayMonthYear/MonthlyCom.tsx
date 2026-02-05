@@ -79,6 +79,7 @@ export default function MonthlyCom() {
         queryFn: () => fetchCompanies(page, search, user, base_url),
         enabled: isAuthenticated && !!user?.token,
         placeholderData: keepPreviousData,
+         staleTime: 60 * 1000,
     });
 
     const handleSearch = (e: React.FormEvent) => {

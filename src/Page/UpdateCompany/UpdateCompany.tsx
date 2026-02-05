@@ -59,7 +59,7 @@ const UpdateCompany = ({
       return res.data
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["getCompanyids"] })
+      queryClient.invalidateQueries({ queryKey: ["companies"] })
       alert("Company updated successfully")
       setOpen(false)
     },

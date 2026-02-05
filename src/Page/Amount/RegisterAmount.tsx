@@ -1,6 +1,6 @@
-import { useState } from "react"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import axios from "axios"
-import { useMutation } from "@tanstack/react-query"
+import { useState } from "react"
 
 import {
   Card,
@@ -11,11 +11,11 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
+import CheckEnvironment from "@/CheckEnvironment/CheckEnvironment"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Button } from "@/components/ui/button"
 import { useSelector } from "react-redux"
-import CheckEnvironment from "@/CheckEnvironment/CheckEnvironment"
 
 
 const formatIndianCurrency = (value: string) => {
@@ -36,10 +36,9 @@ const RegisterAmount = ({ id }: { id: string | undefined }) => {
       auth: { user: { token: string } }
     }) => state.auth
   )
-
+const queryClient = useQueryClient();
   const { base_url } = CheckEnvironment()
 
-  /* ---------- mutation ---------- */
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: { payamount: number; takedate: string }) => {
       const res = await axios.post(
@@ -60,6 +59,7 @@ const RegisterAmount = ({ id }: { id: string | undefined }) => {
     onSuccess: () => {
       setAmount("")
       setDate("")
+        queryClient.invalidateQueries({ queryKey: ["payments"] });
       alert(`Payment of ${amount} is created successfully`)
     },
     onError: (error: { response: { data: { message: string } } }) => {

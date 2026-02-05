@@ -43,17 +43,17 @@ const fetchPayments = async (companyId: string, year: string, base_url: string, 
 }
 
 export function PaymentChart() {
-    const {id} = useParams()
-    const { user, isAuthenticated } = useSelector(
-        (state: {
-            auth: {
-                isAuthenticated: boolean;
-                user: { token: string; _id: string };
-            };
-        }) => state.auth
-    );
+  const { id } = useParams()
+  const { user, isAuthenticated } = useSelector(
+    (state: {
+      auth: {
+        isAuthenticated: boolean;
+        user: { token: string; _id: string };
+      };
+    }) => state.auth
+  );
 
-    const { base_url } = CheckEnvironment();
+  const { base_url } = CheckEnvironment();
 
   const currentYear = new Date().getFullYear().toString()
 
@@ -64,6 +64,7 @@ export function PaymentChart() {
     queryFn: () => fetchPayments(id || "", year, base_url, user?.token || ""),
     placeholderData: keepPreviousData,
     enabled: isAuthenticated && !!id,
+    staleTime: 60 * 1000,
   })
 
   // Transform backend → chart format

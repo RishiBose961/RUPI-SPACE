@@ -12,12 +12,14 @@ import ViewById from "./Page/Amount/ViewById"
 import HalfYear from "./Page/DayMonthYear/HalfYear"
 import MonthlyCom from "./Page/DayMonthYear/MonthlyCom"
 import YearlyComp from "./Page/DayMonthYear/YearlyComp"
+import BreadCrumb from "./components/BreadCrumb/BreadCrumb"
 
 const App = () => {
   useAuthEffect();
   return (
     <div className="max-w-6xl mx-auto px-2">
       <Header />
+      <BreadCrumb/>
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
