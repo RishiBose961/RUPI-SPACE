@@ -9,6 +9,7 @@ type Props = {
   totalAmount: number
 }
 
+
 const updatePayment = async (
   id: string,
   base_url: string,
@@ -18,7 +19,8 @@ const updatePayment = async (
   const res = await axios.put(
     `${base_url}/api/payments/update/${id}`,
     {
-      payamount:totalAmount
+      payamount:totalAmount,
+      paymentdate: new Date().toLocaleDateString("en-IN").replaceAll("/", "-")
     },
     {
       headers: {

@@ -11,9 +11,9 @@ const Header = () => {
         <div>
           <Link to="/" className="flex items-center gap-3">
             <img
-              src="/logo.png"
+              src="/logo.gif"
               alt="Rupi Space Logo"
-              className="size-12 object-contain"
+              className="size-10 object-contain rounded-full"
             />
             <h1 className="text-xl font-mono font-bold tracking-wide ">
               RUPI SPACE

@@ -28,7 +28,7 @@ const App = () => {
           <Route path="/company-register" element={<RegisterCompany />} />
           <Route path="/get-company" element={<GetAllCompany />} />
           <Route path="/get-company/:id" element={<GetCompanyidDetails />} />
-          <Route path="/get-payment/:id" element={<ViewById />} />
+          <Route path="/getpayment/:id" element={<ViewById />} />
           <Route path="/get-half-year" element={<HalfYear />} />
           <Route path="/get-monthly" element={<MonthlyCom />} />
           <Route path="/get-yearly" element={<YearlyComp />} />

@@ -15,12 +15,11 @@ const ViewAmount = ({ id }: { id: string | undefined }) => {
 
                 <CardContent className="space-y-6">
                     <div className="grid grid-cols-4 gap-4">
-                        <Link to={`/get-payment/${id}`}>
+                        <Link to={`/getpayment/${id}`}>
                             <Button>
                                 View Amount
                             </Button>
                         </Link>
-
                     </div>
                 </CardContent>
             </Card>

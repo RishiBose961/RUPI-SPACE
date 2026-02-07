@@ -4,6 +4,7 @@ import { useState } from "react"
 
 import CheckEnvironment from "@/CheckEnvironment/CheckEnvironment"
 import { PaymentChart } from "@/components/Chart/PaymentChart"
+import FineUpdate from "@/components/FineUpdate/FineUpdate"
 import UpdatePayment from "@/components/PaymentComp/UpdatePayment"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -24,7 +25,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { EditIcon } from "lucide-react"
 import { useSelector } from "react-redux"
 import { useParams } from "react-router"
 
@@ -81,7 +81,6 @@ const ViewById = () => {
 
   const payments = data?.data || []
 
-  
 
   return (
     <div className="grid lg:grid-cols-3 gap-4">
@@ -141,7 +140,7 @@ const ViewById = () => {
                 <TableRow>
                   <TableHead>Amount</TableHead>
                   <TableHead>Payment Date</TableHead>
-                   <TableHead>Late Days</TableHead>
+                  <TableHead>Late Days</TableHead>
                   <TableHead>Fine Amount</TableHead>
                   <TableHead>Cal. Fine</TableHead>
                   <TableHead>T Amount</TableHead>
@@ -177,8 +176,11 @@ const ViewById = () => {
                     </TableCell>
                     <TableCell className="text-center">
                       <div className="flex items-center justify-center gap-2">
-                        <span>₹ {(p.fine || 50).toLocaleString("en-IN")}</span>
-                        <EditIcon className="size-4 cursor-pointer text-muted-foreground hover:text-red-500 transition" />
+                        <span>
+                          ₹ {(p.fine !== null && p.fine !== undefined ? p.fine : 50).toLocaleString("en-IN")}
+                        </span>
+                        <FineUpdate id={p._id} />
+
                       </div>
                     </TableCell>
                     <TableCell className="text-center text-orange-600 font-medium">
@@ -195,7 +197,7 @@ const ViewById = () => {
                       )}
                     </TableCell>
                     <TableCell className="text-center">
-                      {!p.paid && <UpdatePayment id={p._id} totalAmount={p.totalAmount}/>}
+                      {!p.paid && <UpdatePayment id={p._id} totalAmount={p.totalAmount} />}
                     </TableCell>
 
                   </TableRow>
